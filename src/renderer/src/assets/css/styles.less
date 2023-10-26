@@ -4,7 +4,7 @@
   --light-grey: #86a5b1;
   --light-blue: #9feaf9;
   --dark-grey: #86a5b1;
-  --dark-blue: #9feaf9;
+  --dark-blue: #24a3bd;
 }
 
 body {
@@ -37,4 +37,22 @@ a {
 
 a:hover {
   border-bottom: 1px solid;
+}
+
+button {
+  padding: 1%;
+  border-radius: 15px 15px 15px 15px;
+  border: 1px linear black;
+  background-color: var(--dark-blue);
+  color: var(--light-blue);
+}
+
+button:hover {
+  background-color: var(--light-blue);
+  color: var(--black);
+  cursor: pointer;
+}
+
+button:active {
+  background-color: var(--dark-blue);
 }
