@@ -5,7 +5,6 @@ import Lists from './Lists.vue';
 import EditAdd from "./EditAdd.vue";
 const sexito = ref(false)
 const xds = () => {
-  console.log('entra miamoooooooor');
   sexito.value = false
 }
 </script>

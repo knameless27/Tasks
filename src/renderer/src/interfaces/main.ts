@@ -15,3 +15,9 @@ export interface basicPropsSvg {
   data: any
 }
 
+export interface basicPropsInput {
+  label: string
+  placeholder: string
+  modelValue?: string
+}
+

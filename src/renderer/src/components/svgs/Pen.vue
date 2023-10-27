@@ -1,11 +1,11 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" version="1.0" :width="props.width" :height="props.height"
-    viewBox="0 0 1272.000000 1280.000000" preserveAspectRatio="xMidYMid meet" @click="emit('onClick', data)"
-    style="cursor: pointer">
+    viewBox="0 0 1272 1280" preserveAspectRatio="xMidYMid meet" @click="emit('onClick', data)"
+    style="cursor: pointer; z-index: 0">
     <metadata>
       Created by potrace 1.15, written by Peter Selinger 2001-2017
     </metadata>
-    <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)" :fill="color" stroke="none">
+    <g transform="translate(0,1280) scale(0.1,-0.1)" :fill="color" stroke="none">
       <path
         d="M10513 12790 c-106 -15 -253 -59 -348 -104 -132 -62 -227 -128 -340 -236 -242 -230 -818 -808 -831 -833 -8 -15 -12 -36 -9 -46 3 -10 566 -577 1250 -1260 1054 -1051 1249 -1241 1272 -1241 24 0 100 73 483 457 322 323 471 480 508 534 96 141 160 290 199 461 23 102 23 384 0 486 -39 170 -111 333 -207 472 -72 102 -963 994 -1079 1080 -121 88 -281 164 -426 201 -100 25 -145 31 -265 34 -80 2 -173 0 -207 -5z" />
       <path
