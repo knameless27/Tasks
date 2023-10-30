@@ -12,7 +12,8 @@
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
-      ]
+      ],
+      "@main_interfaces/*": ["src/interfaces/*"]
     }
   }
 }

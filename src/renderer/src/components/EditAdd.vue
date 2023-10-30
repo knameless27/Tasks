@@ -5,19 +5,21 @@ import Modal from "./Modal.vue";
 import TextArea from './TextArea.vue';
 
 const emit = defineEmits(['closeModal'])
-const name = ref('')
-const description = ref('')
+const item = ref({
+  name: '',
+  description: ''
+})
 
 const saveTask = () => {
-  // const { app, BrowserWindow } = require('electron');
-
+  const task = { ...item.value }
+  window.api.newTask(task);
 }
 </script>
 
 <template>
   <Modal styles="margin: 0; width: 500px">
-    <Input label="Name" v-model="name" placeholder="Write here the name of your task!" />
-    <TextArea label="Description" v-model="description" placeholder="Write here the description of your task!" />
+    <Input label="Name" v-model="item.name" placeholder="Write here the name of your task!" />
+    <TextArea label="Description" v-model="item.description" placeholder="Write here the description of your task!" />
     <button @click="saveTask">Save Task</button>
     <!-- <button @click="emit('closeModal')">Ok</button> -->
   </Modal>

@@ -1,4 +1,5 @@
-interface Task {
+export interface Task {
+  id?: number
   name: string
   description: string
   finished: boolean
@@ -20,4 +21,3 @@ export interface basicPropsInput {
   placeholder: string
   modelValue?: string
 }
-

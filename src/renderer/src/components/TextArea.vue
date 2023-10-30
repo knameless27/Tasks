@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { basicPropsInput } from '../interfaces/main';
+import { basicPropsInput } from '@main_interfaces/main';
 
 // import { ref } from 'vue'
 const emit = defineEmits(['update:modelValue'])

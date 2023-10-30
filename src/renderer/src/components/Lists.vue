@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Tasks } from '../interfaces/main';
+import { Tasks } from '@main_interfaces/main';
 import Pen from "./svgs/Pen.vue"
 import Trash from "./svgs/Trash.vue"
 
@@ -29,7 +29,8 @@ const tasks = ref<Tasks>([
   },
 ])
 
-const sss = (xd) => {
+const sss = async (xd) => {
+  console.log(await window.api.getAllTasks())
   console.log(xd);
 }
 </script>
@@ -62,6 +63,7 @@ const sss = (xd) => {
   grid-template-columns: 1fr 90% 2fr;
   gap: 10px;
   margin-top: 2%;
+  border-bottom: 1px solid black;
 }
 
 .task {
