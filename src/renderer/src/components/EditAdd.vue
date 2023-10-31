@@ -10,9 +10,9 @@ const item = ref({
   description: ''
 })
 
-const saveTask = () => {
+const saveTask = async () => {
   const task = { ...item.value }
-  window.api.newTask(task);
+  console.log(await window.api.newTask(task));
 }
 </script>
 

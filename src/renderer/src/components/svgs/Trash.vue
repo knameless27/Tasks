@@ -11,7 +11,7 @@
   </svg>
 </template>
 <script lang="ts" setup>
-import { basicPropsSvg } from '@main_interfaces/main';
+import { basicPropsSvg } from '../../../../interfaces/main';
 const props = defineProps<basicPropsSvg>()
 
 const emit = defineEmits(['onClick'])

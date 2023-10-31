@@ -1,36 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Tasks } from '@main_interfaces/main';
+import { ref, onMounted } from 'vue';
+import { Tasks } from '../../../interfaces/main';
 import Pen from "./svgs/Pen.vue"
 import Trash from "./svgs/Trash.vue"
 
-const tasks = ref<Tasks>([
-  {
-    name: 's',
-    description: '',
-    finished: false,
-    subTasks: [{
-      name: '',
-      finished: false,
-      description: '',
-      subTasks: []
-    }]
-  },
-  {
-    name: 'sd',
-    description: '',
-    finished: false,
-    subTasks: [{
-      name: '',
-      finished: false,
-      description: '',
-      subTasks: []
-    }]
-  },
-])
+const getTasks = (): Tasks | Promise<Tasks> => {
+  return new Promise(async (res) => {
+    res(await window.api.getAllTasks())
+  })
+}
+
+const tasks = ref<Tasks>([])
+
+onMounted(async () => {
+  tasks.value = await getTasks();
+})
+
 
 const sss = async (xd) => {
-  console.log(await window.api.getAllTasks())
+  // console.log(await window.api.getAllTasks())
   console.log(xd);
 }
 </script>
