@@ -1,5 +1,32 @@
-import { getConnection } from './database'
 import { Task } from '../interfaces/main'
+import { ipcRenderer } from 'electron'
+import fs from 'fs'
+import path from 'path'
+
+const userDataPath = ipcRenderer.sendSync('get-user-data-path')
+const filePath = path.join(userDataPath, 'data.json')
+
+const content = {
+  tasks: []
+}
+
+function doesJsonFileExist(filePath) {
+  try {
+    fs.accessSync(filePath, fs.constants.F_OK)
+    return true
+  } catch (err) {
+    return false
+  }
+}
+if (!doesJsonFileExist(filePath)) {
+  fs.writeFile(filePath, JSON.stringify(content), (err) => {
+    if (err) {
+      console.error('Error al crear el archivo:', err)
+    } else {
+      console.log('Json creado exitosamente.')
+    }
+  })
+}
 
 const defaultResponse = (response: any | undefined, message: string, status: boolean) => {
   return status
@@ -15,89 +42,43 @@ const defaultResponse = (response: any | undefined, message: string, status: boo
       }
 }
 
-function formatObject(obj: any) {
-  // Inicializa un array para almacenar las partes formateadas
-  const formattedParts: any = []
-
-  // Recorre las claves del objeto
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      // Obtiene el valor asociado a la clave
-      const value = obj[key]
-
-      // Formatea la clave y el valor y los agrega al array
-      formattedParts.push(`${key} = '${value}'`)
-    }
-  }
-
-  // Une las partes formateadas en una cadena con comas y espacios
-  const formattedString = formattedParts.join(', ')
-
-  // Devuelve la cadena formateada entre comillas invertidas
-  return formattedString
-}
-
-const del = (id: number | undefined) => {
-  return `DELETE FROM tasks WHERE id = ${id}`
-}
-
-const edit = () => {
-  return 'UPDATE tasks SET'
-}
-
-function create() {
-  return 'INSERT INTO tasks SET'
-}
-
 async function newTask(task: Task) {
   try {
-    return new Promise(async (resolve, reject) => {
-      const connection = getConnection()
+    let json: any
 
-      const query = `${create()} ${formatObject(task)}`
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'))
 
-      await connection.query(query, (err, results) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(results)
-        }
-      })
+    json.tasks.push(task)
 
-    })
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), 'utf8')
+    return getAllTasks()
   } catch (error: any) {
     return defaultResponse(null, error, false)
   }
 }
 
-async function updateTask(task: Task) {
+async function updateTask(task: Task, index: number) {
   try {
-    const connection = getConnection()
+    let json: any
 
-    connection.connect()
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'))
 
-    await connection.query(`${edit} ${formatObject(task)} WHERE id = ${task.id}`)
+    json.tasks[index] = task
 
-    connection.end()
-
-    return defaultResponse(null, 'Task updated successfully!', true)
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), 'utf8')
+    return getTask(index)
   } catch (error: any) {
     return defaultResponse(null, error, false)
   }
 }
 
-async function getTask(task: Task) {
+async function getTask(index: number) {
   try {
-    return defaultResponse(null, 'Task not found!', false)
-    const connection = getConnection()
+    let json: any
 
-    connection.connect()
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'))
 
-    await connection.query(create, task)
-
-    connection.end()
-
-    return defaultResponse(null, 'Task created successfully!', true)
+    return json.tasks[index]
   } catch (error: any) {
     return defaultResponse(null, error, false)
   }
@@ -105,31 +86,23 @@ async function getTask(task: Task) {
 
 async function getAllTasks() {
   try {
-    return new Promise(async (resolve, reject) => {
-      const connection = getConnection()
-
-      await connection.query('SELECT * FROM tasks', (err, results) => {
-        if (err) reject(err)
-        resolve(results)
-      })
-
-    })
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+    return data.tasks
   } catch (error: any) {
     return defaultResponse(null, error, false)
   }
 }
 
-async function deleteTask(task: Task) {
+async function deleteTask(index: number) {
   try {
-    const connection = getConnection()
+    let json: any
 
-    connection.connect()
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'))
 
-    await connection.query(del(task.id))
+    json.tasks.splice(index, 1)
 
-    connection.end()
-
-    return defaultResponse(null, 'Task deleted successfully!', true)
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), 'utf8')
+    return getAllTasks()
   } catch (error: any) {
     return defaultResponse(null, error, false)
   }

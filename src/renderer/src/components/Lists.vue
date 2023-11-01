@@ -4,22 +4,24 @@ import { Tasks } from '../../../interfaces/main';
 import Pen from "./svgs/Pen.vue"
 import Trash from "./svgs/Trash.vue"
 
-const getTasks = (): Tasks | Promise<Tasks> => {
-  return new Promise(async (res) => {
-    res(await window.api.getAllTasks())
-  })
-}
-
 const tasks = ref<Tasks>([])
+const emit = defineEmits(['editTask'])
 
 onMounted(async () => {
-  tasks.value = await getTasks();
+  getTasks()
 })
 
+const editTask = async (index: number) => {
+  emit('editTask', { task: tasks.value[index], index })
+}
 
-const sss = async (xd) => {
-  // console.log(await window.api.getAllTasks())
-  console.log(xd);
+const delTask = async (index: number) => {
+  window.api.deleteTask(index)
+  getTasks()
+}
+
+const getTasks = async () => {
+  tasks.value = await window.api.getAllTasks();
 }
 </script>
 
@@ -38,8 +40,8 @@ const sss = async (xd) => {
         </p>
       </div>
       <div class="actions">
-        <Pen width="20px" height="20px" color="black" @onClick="sss" :data="index" class="pen" />
-        <Trash width="30px" height="30px" color="black" @onClick="sss" :data="index" />
+        <Pen width="20px" height="20px" color="black" @onClick="editTask" :data="index" class="pen" />
+        <Trash width="30px" height="30px" color="black" @onClick="delTask" :data="index" />
       </div>
     </div>
   </div>

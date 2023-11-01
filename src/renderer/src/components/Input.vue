@@ -10,7 +10,7 @@ const { label, placeholder, modelValue } = defineProps<basicPropsInput>()
   <div class="__input_container">
     <label :for="`__${label}`">{{ label }}</label>
     <input type="text" :id="`__${label}`" :placeholder="placeholder" :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)">
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement)?.value)">
   </div>
 </template>
 

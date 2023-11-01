@@ -1,18 +1,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Task } from '../../../interfaces/main';
 import Input from "./Input.vue";
 import Modal from "./Modal.vue";
 import TextArea from './TextArea.vue';
 
 const emit = defineEmits(['closeModal'])
-const item = ref({
+const props = defineProps<{ oldTask: Task | null, index: number }>()
+
+let editing = false
+
+const item = ref<Task>({
   name: '',
-  description: ''
+  description: '',
+  finished: false,
+  image: '',
+  subTasks: []
 })
 
+if (props.oldTask != null) {
+  editing = true
+  item.value = props.oldTask
+}
+
 const saveTask = async () => {
-  const task = { ...item.value }
-  console.log(await window.api.newTask(task));
+  const newItemValue = JSON.parse(JSON.stringify(item.value));
+  editing ?
+    await window.api.updateTask(newItemValue, props.index) :
+    await window.api.newTask(newItemValue);
+  emit('closeModal');
 }
 </script>
 
@@ -21,7 +37,6 @@ const saveTask = async () => {
     <Input label="Name" v-model="item.name" placeholder="Write here the name of your task!" />
     <TextArea label="Description" v-model="item.description" placeholder="Write here the description of your task!" />
     <button @click="saveTask">Save Task</button>
-    <!-- <button @click="emit('closeModal')">Ok</button> -->
   </Modal>
 </template>
 

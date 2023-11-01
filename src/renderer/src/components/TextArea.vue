@@ -10,7 +10,7 @@ const { label, placeholder, modelValue } = defineProps<basicPropsInput>()
   <div class="__textarea_container">
     <label :for="`__${label}`">{{ label }}</label>
     <textarea :id="`__${label}`" :placeholder="placeholder" :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"></textarea>
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement)?.value)"></textarea>
   </div>
 </template>
 
