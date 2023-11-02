@@ -5,7 +5,7 @@ import Pen from "./svgs/Pen.vue"
 import Trash from "./svgs/Trash.vue"
 
 const tasks = ref<Tasks>([])
-const emit = defineEmits(['editTask'])
+const emit = defineEmits(['editTask', 'seeTaskFromList'])
 
 onMounted(async () => {
   getTasks()
@@ -31,7 +31,7 @@ const getTasks = async () => {
       <div class="checkbox">
         <input type="checkbox" v-model="tasks[index].finished">
       </div>
-      <div class="task">
+      <div class="task" @click="emit('seeTaskFromList', {task: tasks[index], index})">
         <del v-if="tasks[index].finished">
           {{ name }}
         </del>
