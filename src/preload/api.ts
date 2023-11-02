@@ -42,7 +42,7 @@ const defaultResponse = (response: any | undefined, message: string, status: boo
       }
 }
 
-async function newTask(task: Task) {
+function newTask(task: Task) {
   try {
     let json: any
 
@@ -57,7 +57,7 @@ async function newTask(task: Task) {
   }
 }
 
-async function updateTask(task: Task, index: number) {
+function updateTask(task: Task, index: number) {
   try {
     let json: any
 
@@ -72,7 +72,7 @@ async function updateTask(task: Task, index: number) {
   }
 }
 
-async function getTask(index: number) {
+function getTask(index: number) {
   try {
     let json: any
 
@@ -84,7 +84,7 @@ async function getTask(index: number) {
   }
 }
 
-async function getAllTasks() {
+function getAllTasks() {
   try {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'))
     return data.tasks
@@ -93,7 +93,7 @@ async function getAllTasks() {
   }
 }
 
-async function deleteTask(index: number) {
+function deleteTask(index: number) {
   try {
     let json: any
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Task } from '../../../interfaces/main';
+import { onMounted, ref } from 'vue'
+import { Task, Tasks } from '../../../interfaces/main';
 import Card from "./Card.vue"
 import Lists from './Lists.vue';
 import EditAdd from "./EditAdd.vue";
@@ -9,6 +9,7 @@ import SeeTask from './seeTask.vue';
 const seeModal = ref(false)
 const seeTaskModal = ref(false)
 const oldTask = ref<Task | null>(null)
+const tasks = ref<Tasks>([])
 const tempTask = ref<Task>({
   name: '',
   description: '',
@@ -17,12 +18,11 @@ const tempTask = ref<Task>({
   subTasks: []
 })
 const indx = ref(-1)
-const listRef = ref(null)
 
 const closingModal = () => {
   seeModal.value = false
   oldTask.value = null
-  listRef.value?.getTasks()
+  tasks.value = window.api.getAllTasks();
 }
 
 const editTask = ({ task, index }) => {
@@ -37,6 +37,9 @@ const seeTaskFromList = ({ task, index }) => {
   tempTask.value = task
   indx.value = index
 }
+onMounted(() => {
+  tasks.value = window.api.getAllTasks();
+})
 </script>
 
 <template>
@@ -48,7 +51,7 @@ const seeTaskFromList = ({ task, index }) => {
         <h1>My Tasks</h1>
         <button @click="seeModal = true">New Task</button>
       </div>
-      <Lists @editTask="editTask" @seeTaskFromList="seeTaskFromList" />
+      <Lists @editTask="editTask" @seeTaskFromList="seeTaskFromList" :tasks="tasks" />
     </Card>
   </div>
 </template>
