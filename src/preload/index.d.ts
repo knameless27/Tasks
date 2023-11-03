@@ -9,6 +9,9 @@ declare global {
       getAllTasks: () => any
       getTasks: (index: number) => any
       updateTask: (task: Task, index: number) => any
+      newSubTask: (task: Task, index: number) => any
+      editSubTask: (task: Task, index: number, fatherIndx: number) => any
+      deleteSubTask: (index: number, fatherIndx: number) => any
       deleteTask: (index: number) => any
     }
   }

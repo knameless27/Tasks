@@ -72,6 +72,51 @@ function updateTask(task: Task, index: number) {
   }
 }
 
+function newSubTask(task: Task, index: number) {
+  try {
+    let json: any
+
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+
+    json.tasks[index].subTasks.push(task)
+
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), 'utf8')
+    return getTask(index)
+  } catch (error: any) {
+    return defaultResponse(null, error, false)
+  }
+}
+
+function editSubTask(task: Task, index: number, fatherIndx: number) {
+  try {
+    let json: any
+
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+
+    json.tasks[fatherIndx].subTasks[index] = task
+
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), 'utf8')
+    return getTask(fatherIndx)
+  } catch (error: any) {
+    return defaultResponse(null, error, false)
+  }
+}
+
+function deleteSubTask(index: number, fatherIndx: number) {
+  try {
+    let json: any
+
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+
+    json.tasks[fatherIndx].subTasks.splice(index, 1)
+
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), 'utf8')
+    return getTask(fatherIndx)
+  } catch (error: any) {
+    return defaultResponse(null, error, false)
+  }
+}
+
 function getTask(index: number) {
   try {
     let json: any
@@ -113,5 +158,8 @@ export default {
   getTask,
   deleteTask,
   updateTask,
-  getAllTasks
+  getAllTasks,
+  newSubTask,
+  editSubTask,
+  deleteSubTask
 }

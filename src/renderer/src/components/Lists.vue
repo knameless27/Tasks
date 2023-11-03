@@ -3,27 +3,26 @@ import { Tasks } from '../../../interfaces/main';
 import Pen from "./svgs/Pen.vue"
 import Trash from "./svgs/Trash.vue"
 
-const { tasks } = defineProps<{tasks: Tasks}>()
-const emit = defineEmits(['editTask', 'seeTaskFromList', 'getTasks'])
+const props = defineProps<{tasks: Tasks}>()
+const emit = defineEmits(['editTask', 'seeTaskFromList', 'getTasks', 'delTask'])
 
 const editTask = async (index: number) => {
-  emit('editTask', { task: tasks[index], index })
+  emit('editTask', { task: props.tasks[index], index })
 }
 
 const delTask = async (index: number) => {
-  window.api.deleteTask(index)
-  emit('getTasks')
+  emit('delTask', index)
 }
 </script>
 
 <template>
-  <div v-for="({ name }, index) in tasks">
+  <div v-for="({ name }, index) in props.tasks">
     <div class="container">
       <div class="checkbox">
-        <input type="checkbox" v-model="tasks[index].finished">
+        <input type="checkbox" v-model="props.tasks[index].finished">
       </div>
-      <div class="task" @click="emit('seeTaskFromList', { task: tasks[index], index })">
-        <del v-if="tasks[index].finished">
+      <div class="task" @click="emit('seeTaskFromList', { task: props.tasks[index], index })">
+        <del v-if="props.tasks[index].finished">
           {{ name }}
         </del>
         <p v-else>

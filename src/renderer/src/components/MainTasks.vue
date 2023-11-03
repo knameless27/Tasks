@@ -22,13 +22,21 @@ const indx = ref(-1)
 const closingModal = () => {
   seeModal.value = false
   oldTask.value = null
-  tasks.value = window.api.getAllTasks();
+  getTasks()
 }
 
 const editTask = ({ task, index }) => {
   seeModal.value = true
   oldTask.value = task
   indx.value = index
+}
+const getTasks = () => {
+  tasks.value = window.api.getAllTasks();
+}
+
+const delTask = (index: number) => {
+  window.api.deleteTask(index)
+  getTasks()
 }
 
 const seeTaskFromList = ({ task, index }) => {
@@ -37,21 +45,28 @@ const seeTaskFromList = ({ task, index }) => {
   tempTask.value = task
   indx.value = index
 }
+
+const closingSeeTask = () => {
+  seeTaskModal.value = false
+  getTasks()
+}
+
 onMounted(() => {
-  tasks.value = window.api.getAllTasks();
+  getTasks()
 })
 </script>
 
 <template>
-  <EditAdd v-if="seeModal" @closeModal="closingModal" :oldTask="oldTask" :index="indx" />
-  <SeeTask v-if="seeTaskModal" @closeModal="seeTaskModal = false" :task="tempTask" :index="indx" />
+  <EditAdd v-if="seeModal" @closeModal="closingModal" @updatingData="closingModal" :oldTask="oldTask" :index="indx" :subTask="false"
+    :fatherIndx="-1" />
+  <SeeTask v-if="seeTaskModal" @getTasks="getTasks" @closeModal="closingSeeTask" :task="tempTask" :index="indx" />
   <div class="container">
     <Card class="card">
       <div class="header">
         <h1>My Tasks</h1>
         <button @click="seeModal = true">New Task</button>
       </div>
-      <Lists @editTask="editTask" @seeTaskFromList="seeTaskFromList" :tasks="tasks" />
+      <Lists @editTask="editTask" @del-task="delTask" @seeTaskFromList="seeTaskFromList" :tasks="tasks" />
     </Card>
   </div>
 </template>
